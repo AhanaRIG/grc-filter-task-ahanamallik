@@ -2,9 +2,12 @@
 from flask import Flask
 # Import modules to receive JSON request and return JSON response
 from flask import request, jsonify
+from flask_cors import CORS
 import sqlite3
 
+
 app = Flask(__name__)
+CORS(app)
 
 DB_NAME = "risks.db"
 
