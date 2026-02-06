@@ -8,10 +8,32 @@ const Dashboard = () => {
   // Add Sorting State
   const [sortOrder, setSortOrder] = useState("asc");
 
+    //  Add Level Mapping
+    const levelMapping = {
+        Low: 1,
+        Medium: 2,
+        High: 3,
+        Critical: 4
+
+    };
+
+
   // Add Loading State
   const [loading, setLoading] = useState(true);
 
-  // Create Sort Function
+//   create sortbyLevel function
+    const sortByLevel = () => {
+        const sorted = [...risks].sort((a,b) => {
+            if (sortOrder === "asc"){
+                return levelMapping[a.level] - levelMapping[b.level]
+            }
+            return levelMapping[b.level] - levelMapping[a.level];
+        });
+
+        setRisks(sorted);
+        setSortOrder(sortOrder === "asc"? "desc" : "asc");
+    }
+  // Create sortByScore Function
   const sortByScore = () => {
     const sorted_risks = [...risks].sort((a, b) => {
       if (sortOrder === "asc") {
@@ -82,8 +104,8 @@ const Dashboard = () => {
       : 0;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Risk Dashboard</h2>
+    <div style={{ padding: "25px" }}>
+      <h2 style={{ textAlign: "center" }}>Risk Dashboard</h2>
       {loading ? (
         <p style={{ textAlign: "center" }}>Loading risks...</p>
       ) : (
@@ -97,17 +119,17 @@ const Dashboard = () => {
               marginBottom: "20px",
             }}
           >
-            <div style={{ border: "1px solid gray", padding: "15px" }}>
+            <div className="statCard">
               <strong>Total Risks: </strong>
               {totalRisks}
             </div>
 
-            <div style={{ border: "1px solid gray", padding: "15px" }}>
+            <div className="statCard">
               <strong>High / Critical: </strong>
               {highCriticalCount}
             </div>
 
-            <div style={{ border: "1px solid gray", padding: "15px" }}>
+            <div className="statCard">
               <strong>Average Score: </strong>
               {averageScore.toFixed(2)}
             </div>
@@ -139,7 +161,7 @@ const Dashboard = () => {
                     Score
                     {sortOrder === "asc" ? "↑" : "↓"}
                   </th>
-                  <th>Level</th>
+                  <th onClick={sortByLevel} style={{cursor: "pointer"}}>Level {sortOrder === "asc" ? "↑" : "↓"}</th>
                 </tr>
               </thead>
 
@@ -159,7 +181,13 @@ const Dashboard = () => {
                       <td>{risk.likelihood}</td>
                       <td>{risk.impact}</td>
                       <td>{risk.score}</td>
-                      <td>{risk.level}</td>
+                      <td>
+                        <span
+                          className={`levelColor ${risk.level.toLowerCase()}`}
+                        >
+                          {risk.level}
+                        </span>
+                      </td>
                     </tr>
                   ))
                 )}
@@ -168,60 +196,66 @@ const Dashboard = () => {
           </div>
 
           {/* Create Heatmap UI */}
-          <h3>Risk Heatmap</h3>
+          <h2 style={{ textAlign: "center", marginTop: "20px" }}>
+            Risk Heatmap
+          </h2>
           <h4 style={{ textAlign: "center", marginBottom: "5px" }}>Impact →</h4>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div style={{ marginRight: "10px", fontWeight: "bold" }}>
-              Likelihood
-            </div>
-            <div style={{ overflowX: "auto" }}>
-              <table>
-                <thead>
-                  <tr>
-                    <th></th>
-                    {[1, 2, 3, 4, 5].map((impact) => (
-                      <th key={impact} style={{ paddingBottom: "10px" }}>
-                        {impact}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {[1, 2, 3, 4, 5].map((likelihood) => (
-                    <tr key={likelihood}>
-                      <th style={{ paddingRight: "15px" }}>{likelihood}</th>
-                      {[1, 2, 3, 4, 5].map((impact) => {
-                        const count = getHeatMapData(likelihood, impact);
-                        return (
-                          // Apply color to heatmap cells
-                          <td
-                            key={impact}
-                            title={
-                              count > 0
-                                ? `${count} risks here: \n${getAssetsForCell(likelihood, impact).join("\n")}`
-                                : "No risks here"
-                            }
-                            style={{
-                              backgroundColor: getHeatMapColor(
-                                likelihood,
-                                impact,
-                              ),
-                              textAlign: "center",
-                              padding: "12px",
-                              border: "1px solid gray",
-                            }}
-                          >
-                            {count}
-                          </td>
-                        );
-                      })}
+          <div className="heatmapContainer">
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div style={{ marginRight: "10px", fontWeight: "bold" }}>
+                Likelihood
+              </div>
+              <div style={{ overflowX: "auto" }}>
+                <table>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      {[1, 2, 3, 4, 5].map((impact) => (
+                        <th key={impact} style={{ paddingBottom: "10px" }}>
+                          {impact}
+                        </th>
+                      ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+
+                  <tbody>
+                    {[1, 2, 3, 4, 5].map((likelihood) => (
+                      <tr key={likelihood}>
+                        <th style={{ paddingRight: "15px" }}>{likelihood}</th>
+                        {[1, 2, 3, 4, 5].map((impact) => {
+                          const count = getHeatMapData(likelihood, impact);
+                          return (
+                            // Apply color to heatmap cells
+                            <td
+                              key={impact}
+                              title={
+                                count > 0
+                                  ? `${count} risks here: \n${getAssetsForCell(likelihood, impact).join("\n")}`
+                                  : "No risks here"
+                              }
+                              style={{
+                                backgroundColor: getHeatMapColor(
+                                  likelihood,
+                                  impact,
+                                ),
+                                textAlign: "center",
+                                padding: "12px",
+                                border: "1px solid gray",
+                                color: "#0b1630",
+                              }}
+                            >
+                              {count}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
+          
         </>
       )}
     </div>

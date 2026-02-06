@@ -53,10 +53,11 @@ const RiskForm = () => {
     }
     
     return (
-    <div style = {{padding: "20px"}}>
+    <div className="riskFormContainer">
+    <div className="riskForm">
         <h2>Add Risk Assessment</h2>
         {/* Assess Input */}
-        <div>
+        <div className='formRow'>
             <label>Asset:</label>
             <input
                 type="text"
@@ -65,7 +66,7 @@ const RiskForm = () => {
             />
         </div>
 
-        <div>
+        <div className='formRow'>
             {/* Threat Input */}
             <label>Threat:</label>
             <input
@@ -75,7 +76,7 @@ const RiskForm = () => {
             />
         </div>
 
-        <div>
+        <div className='formRow'>
             {/* Likelihood Slider */}
             <label>Likelihood: {likelihood}</label>
             <input 
@@ -88,7 +89,7 @@ const RiskForm = () => {
         </div>
 
         {/* Impact Slider  */}
-        <div>
+        <div className='formRow'>
             <label>Impact: {impact}</label>
             <input 
                 type= "range"
@@ -105,7 +106,8 @@ const RiskForm = () => {
         </h3>
 
         {/* Submit Button */}
-        <button onClick={handleSubmit}>Add Risk</button>
+        <button onClick={handleSubmit}  className='buttonContainer'>Add Risk</button>
+    </div>
     </div>
   )
 }
