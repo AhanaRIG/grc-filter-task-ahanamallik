@@ -62,9 +62,31 @@ const Dashboard = () => {
             .map(risk => risk.asset);
     };
 
+    // Stats Card Calculation
+    const totalRisks = risks.length;
+    const highCriticalCount = risks.filter((risk) => risk.level === "High" || risk.level === "Critical").length;
+
+    const averageScore = totalRisks>0 
+    ? risks.reduce((sum,risk) => sum+risk.score,0)/totalRisks
+    : 0;
+
   return (
     <div style={{padding: "20px"}}>
         <h2>Risk Dashboard</h2>
+        {/* Add State Card */}
+        <div style={{display:"flex", gap: "15px", marginBottom:"20px"}}>
+            <div style={{border:"1px solid gray", padding:"15px"}}>
+                <strong>Total Risks: </strong>{totalRisks}
+            </div>
+
+            <div style={{border:"1px solid gray", padding:"15px"}}>
+                <strong>High / Critical: </strong>{highCriticalCount}
+            </div>
+
+            <div style={{border:"1px solid gray", padding:"15px"}}>
+                <strong>Average Score: </strong>{averageScore.toFixed(2)}
+            </div>
+        </div>
         {/* Add Dropdown UI */}
         <div style ={{marginBottom: "15px"}}>
             <label style={{marginRight: "5px"}}>Filter by Level: </label>
