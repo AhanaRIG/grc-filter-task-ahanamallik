@@ -1,49 +1,49 @@
 import React, { useEffect, useState } from "react";
+//  Add Level Mapping
+  const levelMapping = {
+    Low: 1,
+    Medium: 2,
+    High: 3,
+    Critical: 4,
+  };
 
 const Dashboard = () => {
   const [risks, setRisks] = useState([]);
   // Add Filter state
   const [filterLevel, setFilterLevel] = useState("All");
 
-  // Add Sorting State
-  const [sortOrder, setSortOrder] = useState("asc");
+  // Add sort by Score state
+  const [sortOrderByScore, setSortOrderByScore] = useState("asc");
 
-    //  Add Level Mapping
-    const levelMapping = {
-        Low: 1,
-        Medium: 2,
-        High: 3,
-        Critical: 4
-
-    };
-
+//   Add sort by Level state
+const [sortOrderByLevel, setSortOrderByLevel] = useState("asc");
 
   // Add Loading State
   const [loading, setLoading] = useState(true);
 
-//   create sortbyLevel function
-    const sortByLevel = () => {
-        const sorted = [...risks].sort((a,b) => {
-            if (sortOrder === "asc"){
-                return levelMapping[a.level] - levelMapping[b.level]
-            }
-            return levelMapping[b.level] - levelMapping[a.level];
-        });
+  //   create sortbyLevel function
+  const sortByLevel = () => {
+    const sorted = [...risks].sort((a, b) => {
+      if (sortOrderByLevel === "asc") {
+        return levelMapping[a.level] - levelMapping[b.level];
+      }
+      return levelMapping[b.level] - levelMapping[a.level];
+    });
 
-        setRisks(sorted);
-        setSortOrder(sortOrder === "asc"? "desc" : "asc");
-    }
+    setRisks(sorted);
+    setSortOrderByLevel(sortOrderByLevel === "asc" ? "desc" : "asc");
+  };
   // Create sortByScore Function
   const sortByScore = () => {
     const sorted_risks = [...risks].sort((a, b) => {
-      if (sortOrder === "asc") {
+      if (sortOrderByScore === "asc") {
         return a.score - b.score;
       } else {
         return b.score - a.score;
       }
     });
     setRisks(sorted_risks);
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    setSortOrderByScore(sortOrderByScore === "asc" ? "desc" : "asc");
   };
 
   useEffect(() => {
@@ -103,6 +103,22 @@ const Dashboard = () => {
       ? risks.reduce((sum, risk) => sum + risk.score, 0) / totalRisks
       : 0;
 
+  // Mitigation Hint logic
+  const getMitigationHint = (level) => {
+    switch (level) {
+      case "Low":
+        return "Accept / monitor";
+      case "Medium":
+        return "Plan mitigation within 6 months";
+      case "High":
+        return "Prioritize action + compensating controls (NIST PR.AC)";
+      case "Critical":
+        return "Immediate mitigation required + executive reporting";
+      default:
+        return "";
+    }
+  };
+
   return (
     <div style={{ padding: "25px" }}>
       <h2 style={{ textAlign: "center" }}>Risk Dashboard</h2>
@@ -159,16 +175,19 @@ const Dashboard = () => {
                   <th>Impact</th>
                   <th style={{ cursor: "pointer" }} onClick={sortByScore}>
                     Score
-                    {sortOrder === "asc" ? "↑" : "↓"}
+                    {sortOrderByScore === "asc" ? "↑" : "↓"}
                   </th>
-                  <th onClick={sortByLevel} style={{cursor: "pointer"}}>Level {sortOrder === "asc" ? "↑" : "↓"}</th>
+                  <th onClick={sortByLevel} style={{ cursor: "pointer" }}>
+                    Level {sortOrderByLevel === "asc" ? "↑" : "↓"}
+                  </th>
+                  <th>Mitigation Hint</th>
                 </tr>
               </thead>
 
               <tbody>
                 {risks.length === 0 ? (
                   <tr>
-                    <td colSpan="7" style={{ textAlign: "center" }}>
+                    <td colSpan="8" style={{ textAlign: "center" }}>
                       No risks yet
                     </td>
                   </tr>
@@ -188,6 +207,7 @@ const Dashboard = () => {
                           {risk.level}
                         </span>
                       </td>
+                      <td>{getMitigationHint(risk.level)}</td>
                     </tr>
                   ))
                 )}
@@ -255,7 +275,6 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          
         </>
       )}
     </div>
