@@ -20,6 +20,10 @@ const RiskForm = () => {
 
     // Connect Backend POST API to submit button
     const handleSubmit = async () => {
+        if(!asset.trim() || !threat.trim()){
+            alert("Asset and Threat fields are required");
+            return;
+        }
         try {
             const response = await fetch("http://127.0.0.1:5000/assess-risk", {
                 method: "POST",
