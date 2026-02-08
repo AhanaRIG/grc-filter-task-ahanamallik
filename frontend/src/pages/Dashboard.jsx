@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-//  Add Level Mapping
+// Mapping for sorting risk levels numerically
 const levelMapping = {
     Low: 1,
     Medium: 2,
@@ -9,19 +9,12 @@ const levelMapping = {
 
 const Dashboard = () => {
     const [risks, setRisks] = useState([]);
-    // Add Filter state
     const [filterLevel, setFilterLevel] = useState("All");
-
-    // Add sort by Score state
     const [sortOrderByScore, setSortOrderByScore] = useState("asc");
-
-    //   Add sort by Level state
     const [sortOrderByLevel, setSortOrderByLevel] = useState("asc");
-
-    // Add Loading State
     const [loading, setLoading] = useState(true);
 
-    //   create sortbyLevel function
+    // Sort risks by risk level
     const sortByLevel = () => {
         const sorted = [...risks].sort((a, b) => {
             if (sortOrderByLevel === "asc") {
@@ -33,19 +26,20 @@ const Dashboard = () => {
         setRisks(sorted);
         setSortOrderByLevel(sortOrderByLevel === "asc" ? "desc" : "asc");
     };
-    // Create sortByScore Function
+    // Sort risks by calculated score
     const sortByScore = () => {
-        const sorted_risks = [...risks].sort((a, b) => {
+        const sortedRisks = [...risks].sort((a, b) => {
             if (sortOrderByScore === "asc") {
                 return a.score - b.score;
             } else {
                 return b.score - a.score;
             }
         });
-        setRisks(sorted_risks);
+        setRisks(sortedRisks);
         setSortOrderByScore(sortOrderByScore === "asc" ? "desc" : "asc");
     };
 
+    //   Fetch risks whenever filter changes
     useEffect(() => {
         fetchRisks(filterLevel);
     }, [filterLevel]);
@@ -66,15 +60,13 @@ const Dashboard = () => {
             console.error("Error fetching risks:", error);
         }
     };
-
-    // Create Heatmap Grid data
-    const getHeatMapData = (likelihood, impact) => {
+    //   Count risks for each heatmap cell
+    const getHeatmapData = (likelihood, impact) => {
         return risks.filter(
             (risk) => risk.likelihood === likelihood && risk.impact === impact,
         ).length;
     };
-
-    // Create Color Logic Function
+    //   Define color based on score
     const getHeatMapColor = (likelihood, impact) => {
         const score = likelihood * impact;
         if (score <= 5) return "#00FF00";
@@ -82,8 +74,7 @@ const Dashboard = () => {
         else if (score <= 18) return "#FFA500";
         else return "#FF0000";
     };
-
-    // Create Function to get Asset names
+    //   Define asset names for tooltip
     const getAssetsForCell = (likelihood, impact) => {
         return risks
             .filter(
@@ -92,7 +83,7 @@ const Dashboard = () => {
             .map((risk) => risk.asset);
     };
 
-    // Stats Card Calculation
+    //  Dashboard Stats Card Calculation
     const totalRisks = risks.length;
     const highCriticalCount = risks.filter(
         (risk) => risk.level === "High" || risk.level === "Critical",
@@ -102,8 +93,7 @@ const Dashboard = () => {
         totalRisks > 0
             ? risks.reduce((sum, risk) => sum + risk.score, 0) / totalRisks
             : 0;
-
-    // Mitigation Hint logic
+    //   Mitigation Hint recommendation function
     const getMitigationHint = (level) => {
         switch (level) {
             case "Low":
@@ -118,10 +108,8 @@ const Dashboard = () => {
                 return "";
         }
     };
-
-    //   ExportCSV Function
+    //   Export risks data as CSV
     const exportAsCSV = () => {
-        // Header
         const headers = [
             "ID",
             "Asset",
@@ -130,10 +118,8 @@ const Dashboard = () => {
             "Impact",
             "Score",
             "Level",
-            "Mitigation Hint"
+            "Mitigation Hint",
         ];
-
-        // Convert risks data to rows
         const rows = risks.map((risk) => [
             risk.id,
             risk.asset,
@@ -142,12 +128,12 @@ const Dashboard = () => {
             risk.impact,
             risk.score,
             risk.level,
-            getMitigationHint(risk.level)
+            getMitigationHint(risk.level),
         ]);
 
-        // combine header and rows
         const csvContent = [headers, ...rows]
-            .map(row => row.join(",")).join("\n");
+            .map((row) => row.join(","))
+            .join("\n");
 
         // create downloadable file
         const blob = new Blob([csvContent], { type: "text/csv" });
@@ -162,11 +148,12 @@ const Dashboard = () => {
     return (
         <div style={{ padding: "25px" }}>
             <h2 style={{ textAlign: "center" }}>Risk Dashboard</h2>
+
             {loading ? (
                 <p style={{ textAlign: "center" }}>Loading risks...</p>
             ) : (
                 <>
-                    {/* Add State Card */}
+                    {/* Dashboard Stats Card*/}
                     <div
                         style={{
                             display: "flex",
@@ -190,7 +177,7 @@ const Dashboard = () => {
                             {averageScore.toFixed(2)}
                         </div>
                     </div>
-                    {/* Add Dropdown UI */}
+                    {/* Filter Dropdown*/}
                     <div style={{ marginBottom: "15px" }}>
                         <label style={{ marginRight: "5px" }}>Filter by Level: </label>
                         <select
@@ -204,9 +191,22 @@ const Dashboard = () => {
                             <option>Critical</option>
                         </select>
                     </div>
-                    <button onClick={exportAsCSV} style={{ margin: "10px 0px 10px" }} >
-                        Export CSV
-                    </button>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <button onClick={exportAsCSV} style={{ margin: "10px 0px 10px" }}>
+                            Export CSV
+                        </button>
+                        <h4
+                            style={{
+                                marginTop: "25px",
+                                border: "1px solid white",
+                                padding: "6px 10px",
+                                borderRadius: "10px",
+                            }}
+                        >
+                            Scale: Likelihood and Impact range from 1 (Low) to 5 (High)
+                        </h4>
+                    </div>
+                    {/* Risk data table */}
                     <div style={{ overflowX: "auto" }}>
                         <table>
                             <thead>
@@ -258,7 +258,7 @@ const Dashboard = () => {
                         </table>
                     </div>
 
-                    {/* Create Heatmap UI */}
+                    {/* Risk Heatmap */}
                     <h2 style={{ textAlign: "center", marginTop: "20px" }}>
                         Risk Heatmap
                     </h2>
@@ -286,7 +286,7 @@ const Dashboard = () => {
                                             <tr key={likelihood}>
                                                 <th style={{ paddingRight: "15px" }}>{likelihood}</th>
                                                 {[1, 2, 3, 4, 5].map((impact) => {
-                                                    const count = getHeatMapData(likelihood, impact);
+                                                    const count = getHeatmapData(likelihood, impact);
                                                     return (
                                                         // Apply color to heatmap cells
                                                         <td
@@ -317,6 +317,14 @@ const Dashboard = () => {
                                 </table>
                             </div>
                         </div>
+                    </div>
+                    {/* Heatmap Legend */}
+                    <div style={{fontSize:"15px"}}>
+                        <strong>Legend: </strong>
+                        <span style={{color:"#00FF00"}}> Low </span>|
+                        <span style={{color:"#FFFF00"}}> Medium </span>|
+                        <span style={{color:"#FFA500"}}> High </span>|
+                        <span style={{color:"#FF0000"}}> Critical </span> 
                     </div>
                 </>
             )}
