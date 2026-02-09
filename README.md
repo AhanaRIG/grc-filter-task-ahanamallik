@@ -46,7 +46,7 @@ The dashboard and heatmap help to demonstrate how organizations monitor risks, i
 
 ## Setup Instructions
 ### Clone Repository
-    - git clone <my-repo-link>
+    - git clone https://github.com/AhanaRIG/grc-filter-task-ahanamallik.git
     - cd grc-risk-tool-ahanamallik
 ### Backend Setup
     1. Navigate to backend folder
