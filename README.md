@@ -8,15 +8,17 @@ The goal of this project is to demonstrate how organizations track, identify and
 
 ## Live Demo
 The application is deployed on render and can be accessed by using the link below:
-Application Link
+*Application Link*
 https://grc-risk-frontend.onrender.com
 
-The Live demo allows users to:
+**Note:** The application may take 30-60 seconds to load initially as the free-tier Render instance spins up from sleep mode.
+
+The live demo allows users to:
     - Add risks using the risk assessment form
     - View risks data on the dashboard page
     - Sort data based on risk score and severity level
     - Visualize risk distribution through heatmap
-    - Export risk data as CSV
+    - Export risk data as CSV (desktop browsers only)
     
 ## Features
 ### Risk Assessment Form
@@ -110,6 +112,32 @@ Once both servers are running:
         - `.env` files are excluded from version control for better security
         - Example configuration templates are provided as `.env.example` in both folders.
 
+## Deployment
+The application is deployed using Render with separate services for the frontend and backend.
+    - Frontend: Deployed as a Static Site
+    - Backend: Deployed as a Web Service
+    - Database: SQLite3 with persistent storage enabled
+
+### Live Application Links
+    - Frontend (Live App): https://grc-risk-frontend.onrender.com
+    - Backend API: https://grc-risk-backend-k6ev.onrender.com
+
+### Deployment Process
+    1. Push the project code to the GitHub repository
+    2. Connect the repository to Render
+    3. Deploy Backend Service
+        - Select backend directory
+        - Set build command: pip install -r requirements.txt
+        - Set start command: python app.py
+        - Configure required environment variables
+        - Enable persistent disk for SQLite database
+    4. Deploy Frontend Service
+        - Select frontend directory
+        - Set build command: npm install && npm run build
+        - Set output directory: dist
+        - Configure API base URL to point to deployed backend
+    5. Verify frontend-backend communication after deployment
+
 ## Architecture Overview
 The application follows a client-server architecture:
 - React frontend handles UI rendering, risk input, and data visualization.
@@ -186,7 +214,7 @@ While testing the APIs through Postman, I noticed that GET API was returning an 
 While connecting the React frontend with the Flask backend, API requests from the frontend were getting blocked and the dashboard was not able to fetch data from database. After checking the browser console, I noticed CORS-related error messages and I remembered that this usually happens when frontend and backend run on different ports. So I resolved the issue by enabling CORS in the Flask backend using Flask-CORS library. This ensured proper communication with the frontend and backend.
 
 ### Improving Git Repository Structure
-While organizing the project repository, I noticed some local files, such as the database file and env file, were being tracked in version control. Since these files are system-specific and change frequently, so including them could increase repository size and create issues when sharing the project. To resolve this, I updated the .gitignore file to exclude these files. This helped me to understand the importance of managing a clean, well structured repository.
+While organizing the project repository, I noticed some local files, such as the database files were being tracked in version control. Since these files are system-specific and change frequently, so including them could increase repository size and create issues when sharing the project. To resolve this, I updated the .gitignore file to exclude these files. This helped me to understand the importance of managing a clean, well structured repository.
 
 ### Issue with Repeated API Calls during Data Fetching
 While developing the dashboard, I initially tried to call the data-fetching function (fetchRisks()) function directly in the component, which caused an infinite number of API calls. This happened because every time the data was fetched, state was updated which triggered the component to re-render and call the function repeatedly. I resolved this problem by realizing that useEffect hook is needed to control the function calling. So I moved the function within useEffect and added filterLevel in dependency array for controlling data fetching and filtering. This issue helped me understand how React handles rendering and side effects and I realized the importance of useEffect hook.
@@ -196,6 +224,9 @@ While implementing the heatmap, I faced difficulty in correctly displaying risk 
 
 ### Issue with CSV Export Implementation
 While implementing the CSV export functionality, I faced difficulty in converting dashboard risk data into proper CSV format. Initially, it was challenging for me to structure the data with headers and rows correctly, but I resolved it by creating a header array and mapping the risk data into row format and then combined them into a CSV string. I also learned how to implement file downloading functionality using Blob. This helped me to understand how data can be converted into downloadable file formats.
+
+### Issue with CSV Export on Mobile Devices
+While testing CSV export on mobile devices, I noticed that Blob-based download functionality did not work across mobile devices. After testing different approaches including data URLs, Clipboard API, I discovered they also didn't work on mobile devices. To ensure a seamless user experience, I kept this feature restricted to desktop browsers only and added an alert for mobile devices to use desktop borswer to export CSV. This experience taught me about browser compatibility challenges.
 
 ## Assumptions
 - Login and user roles are not included in this project. I assumed this tool will be used by a single team, so I did not implement login and role-based access.
@@ -211,6 +242,7 @@ While implementing the CSV export functionality, I faced difficulty in convertin
 - Add MySQL or PostgreSQL for handling multiple user login functionality because SQLite3 can lock database from others while one user accessing it.
 - Add search bar option in dashboard to help users retrieve specific risks easily.
 - Improve mobile view so that application works properly on smaller screens.
+- Add mobile-friendly CSV export functionality.
 
 ## License
 This project is licensed under the MIT License.

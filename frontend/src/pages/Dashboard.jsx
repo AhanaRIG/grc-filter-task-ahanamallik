@@ -114,6 +114,11 @@ const Dashboard = () => {
             alert("No risks data available to export ");
             return;
         }
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if(isMobile){
+            alert("please use a desktop browser to export CSV");
+            return;
+        }
         const headers = [
             "ID",
             "Asset",
@@ -139,7 +144,7 @@ const Dashboard = () => {
             .map((row) => row.join(","))
             .join("\n");
 
-        // create downloadable file
+        // create downloadable file      
         const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
         const url = window.URL.createObjectURL(blob);
 
@@ -150,7 +155,6 @@ const Dashboard = () => {
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
-        
         
     };
 
