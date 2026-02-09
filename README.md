@@ -6,6 +6,17 @@ This project is a full-stack web application that represents a simplified versio
 
 The goal of this project is to demonstrate how organizations track, identify and mitigate risks which may affect organizational systems and data security.
 
+## Live Demo
+The application is deployed on render and can be accessed by using the link below:
+Application Link
+https://grc-risk-frontend.onrender.com
+The Live demo allows users to:
+    - Add risks using the risk assessment form
+    - View risks data on the dashboard page
+    - Sort data based on risk score and severity level
+    - Visualize risk distribution through heatmap
+    - Export risk data as CSV
+    
 ## Features
 ### Risk Assessment Form
 - Users can enter asset name and threat description as inputs
