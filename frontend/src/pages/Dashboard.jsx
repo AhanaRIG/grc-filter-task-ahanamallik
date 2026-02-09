@@ -46,7 +46,7 @@ const Dashboard = () => {
 
     const fetchRisks = async (level = "All") => {
         try {
-            let url = "http://127.0.0.1:5000/risks";
+            let url = `${import.meta.env.VITE_API_BASE_URL}/risks`;
             if (level !== "All") {
                 url += `?level=${level}`;
             }

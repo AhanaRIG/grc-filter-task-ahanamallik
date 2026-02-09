@@ -9,7 +9,6 @@ const RiskForm = () => {
     const navigate = useNavigate();
 
     const score = likelihood * impact;
-    // console.log("Score:",score)
     const riskLevel = (score) => {
         if (score > 18) return "Critical"
         if (score > 12) return "High"
@@ -23,7 +22,7 @@ const RiskForm = () => {
             return;
         }
         try {
-            const response = await fetch("http://127.0.0.1:5000/assess-risk", {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/assess-risk`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
