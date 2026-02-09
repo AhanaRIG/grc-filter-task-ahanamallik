@@ -10,6 +10,7 @@ The goal of this project is to demonstrate how organizations track, identify and
 The application is deployed on render and can be accessed by using the link below:
 Application Link
 https://grc-risk-frontend.onrender.com
+
 The Live demo allows users to:
     - Add risks using the risk assessment form
     - View risks data on the dashboard page

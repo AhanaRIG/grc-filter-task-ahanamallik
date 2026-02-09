@@ -145,7 +145,8 @@ const Dashboard = () => {
 
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if(isMobile){
-            window.location.href = url;
+            const dataUrl = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent);
+            window.location.href = dataUrl;
         }
         else{
             const link = document.createElement("a");
