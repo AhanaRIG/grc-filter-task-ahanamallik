@@ -9,7 +9,7 @@ const RiskForm = () => {
     const navigate = useNavigate();
 
     const score = likelihood * impact;
-    console.log("Score:",score)
+    // console.log("Score:",score)
     const riskLevel = (score) => {
         if (score > 18) return "Critical"
         if (score > 12) return "High"
@@ -63,7 +63,7 @@ const RiskForm = () => {
             <input
                 type="text"
                 value={asset}
-                placeholder='Enter asset name'
+                placeholder='e.g. Database Server'
                 onChange={(e) => setAsset(e.target.value)}
             />
         </div>
@@ -73,7 +73,7 @@ const RiskForm = () => {
             <input
                 type="text"
                 value={threat}
-                placeholder='Enter threat name'
+                placeholder='e.g. Unauthorized Access'
                 onChange={(e) => setThreat(e.target.value)}
             />
         </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// Mapping for sorting risk levels numerically
+
 const levelMapping = {
     Low: 1,
     Medium: 2,

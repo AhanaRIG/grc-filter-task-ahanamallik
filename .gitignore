@@ -23,4 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 backend/risks.db
+*.db
+venv/
+backend/venv/
+__pycache__/
+.env
 
