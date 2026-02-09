@@ -147,7 +147,7 @@ const Dashboard = () => {
 
     return (
         <div style={{ padding: "25px" }}>
-            <h2 style={{ textAlign: "center" }}>Risk Dashboard</h2>
+            <h2 style={{ textAlign: "center", marginBottom:"25px" }}>Risk Dashboard</h2>
 
             {loading ? (
                 <p style={{ textAlign: "center" }}>Loading risks...</p>
@@ -183,6 +183,7 @@ const Dashboard = () => {
                         <select
                             value={filterLevel}
                             onChange={(e) => setFilterLevel(e.target.value)}
+                            style={{border:"1px solid white"}}
                         >
                             <option>All</option>
                             <option>Low</option>
@@ -191,7 +192,7 @@ const Dashboard = () => {
                             <option>Critical</option>
                         </select>
                     </div>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between",flexWrap:"wrap", gap:"5px"}}>
                         <button onClick={exportAsCSV} style={{ margin: "10px 0px 10px" }}>
                             Export CSV
                         </button>
@@ -259,7 +260,7 @@ const Dashboard = () => {
                     </div>
 
                     {/* Risk Heatmap */}
-                    <h2 style={{ textAlign: "center", marginTop: "20px" }}>
+                    <h2 style={{ textAlign: "center", marginTop: "20px" , marginBottom:"20px"}}>
                         Risk Heatmap
                     </h2>
                     <h4 style={{ textAlign: "center", marginBottom: "5px" }}>Impact →</h4>
@@ -319,7 +320,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                     {/* Heatmap Legend */}
-                    <div style={{fontSize:"15px"}}>
+                    <div style={{fontSize:"15px", marginTop:"30px"}}>
                         <strong>Legend: </strong>
                         <span style={{color:"#00FF00"}}> Low </span>|
                         <span style={{color:"#FFFF00"}}> Medium </span>|
