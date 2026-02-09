@@ -145,7 +145,7 @@ const Dashboard = () => {
 
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if(isMobile){
-            window.open(url,"_blank");
+            window.location.href = url;
         }
         else{
             const link = document.createElement("a");
