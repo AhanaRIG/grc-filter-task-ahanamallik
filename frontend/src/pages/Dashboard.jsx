@@ -110,6 +110,10 @@ const Dashboard = () => {
     };
     //   Export risks data as CSV
     const exportAsCSV = () => {
+        if(risks.length==0){
+            alert("No risks data available to export ");
+            return;
+        }
         const headers = [
             "ID",
             "Asset",
@@ -139,10 +143,17 @@ const Dashboard = () => {
         const blob = new Blob([csvContent], { type: "text/csv" });
         const url = window.URL.createObjectURL(blob);
 
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "risksData.csv";
-        link.click();
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if(isMobile){
+            window.open(url,"_blank");
+        }
+        else{
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "risksData.csv";
+            link.click();
+        }
+        
     };
 
     return (

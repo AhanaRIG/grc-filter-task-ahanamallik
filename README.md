@@ -20,7 +20,7 @@ The Live demo allows users to:
 ## Features
 ### Risk Assessment Form
 - Users can enter asset name and threat description as inputs
-- Sliders are present to help users to provide proper likelihood and impact values (1-5 range)
+- Sliders are present to help users to provide proper likelihood and impact values  (1-5 range)
 - Real-time preview of risk score and level 
 - Input validations prevent empty or wrong input type submission
 - Risk data is stored in backend database
