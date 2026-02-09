@@ -140,20 +140,17 @@ const Dashboard = () => {
             .join("\n");
 
         // create downloadable file
-        const blob = new Blob([csvContent], { type: "text/csv" });
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
         const url = window.URL.createObjectURL(blob);
 
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if(isMobile){
-            const dataUrl = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent);
-            window.location.href = dataUrl;
-        }
-        else{
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = "risksData.csv";
-            link.click();
-        }
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "risksData.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        
         
     };
 
