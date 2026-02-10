@@ -194,7 +194,7 @@ Testing confirmed that application behaved as expected across different input co
 
 ## Screenshots
 ### Risk Assessment Form
-![Risk Form](screenshots/RiskForm.png)
+![Risk Form](screenshots/Riskform.png)
 *Data entry with real-time score and severity preview*
 
 ### Dashboard
